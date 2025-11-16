@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS AI 2</title>
+    <title>JAVIS AI 2</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -17,7 +17,6 @@
     </style>
 
     <script type="module">
-        /* ---------------------- Firebase ------------------------- */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -35,7 +34,7 @@
                     db = getFirestore(app);
                     auth = getAuth(app);
 
-                    setLogLevel('debug'); 
+                    setLogLevel('debug');
 
                     if (initialAuthToken) {
                         await signInWithCustomToken(auth, initialAuthToken);
@@ -51,7 +50,6 @@
             }
         }
 
-        /* ---------------------- Backoff Fetch ------------------------- */
         async function fetchWithBackoff(url, opts, retries = 5) {
             for (let i = 1; i <= retries; i++) {
                 try {
@@ -71,7 +69,6 @@
             }
         }
 
-        /* ---------------------- Gemini ------------------------- */
         async function generateAIContent(prompt) {
             const apiKey = "AIzaSyC1v0qpnQ67wdZ-F1JiAMZ2d-HH4HFF-WU";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
@@ -90,11 +87,18 @@
             });
 
             const data = await res.json();
-            return data?.candidates?.[0]?.content?.parts?.[0]?.text
-                || "Error: No response from AI.";
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            return text || "Error: No response from AI.";
         }
 
-        /* ---------------------- Voice Input Only ------------------------- */
+        function speakText(text) {
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = "en-US";
+            u.rate = 1;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(u);
+        }
+
         function startVoiceInput(target) {
             const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!Rec) return alert("Voice input not supported.");
@@ -107,7 +111,6 @@
             rec.onresult = e => target.value = e.results[0][0].transcript;
         }
 
-        /* ---------------------- UI Logic ------------------------- */
         window.onload = async () => {
             await initializeFirebaseAndAuth();
 
@@ -116,8 +119,12 @@
             const loadingIndicator = document.getElementById("loadingIndicator");
             const responseContainer = document.getElementById("responseContainer");
             const voiceInputButton = document.getElementById("voiceInputButton");
+            const repeatVoiceButton = document.getElementById("repeatVoiceButton");
+
+            let lastAIResponse = "";
 
             voiceInputButton.onclick = () => startVoiceInput(promptInput);
+            repeatVoiceButton.onclick = () => speakText(lastAIResponse);
 
             generateButton.onclick = async () => {
                 const prompt = promptInput.value.trim();
@@ -137,6 +144,11 @@
                             ${text.replace(/\n/g, "<br>")}
                         </div>
                     `;
+
+                    lastAIResponse = text;
+                    repeatVoiceButton.classList.remove("hidden");
+                    speakText(text);
+
                 } catch (e) {
                     responseContainer.innerHTML = `<p class="text-red-600">${e}</p>`;
                 }
@@ -148,30 +160,45 @@
     </script>
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center p-6">
+<body class="min-h-screen flex flex-col items-center p-6"
+      style="background: linear-gradient(135deg,
+      #ff9ab7,
+      #ffffff,
+      #fff3a0,
+      #9fd3ff
+      );">
 
     <div class="w-full max-w-3xl">
 
         <div class="text-center mb-8">
             <h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100">
-                JARVIS AI 2
+                JAVIS AI 2
             </h1>
-            <p class="text-gray-500 dark:text-gray-400 mt-2">
+            <p class="text-gray-700 dark:text-gray-200 mt-2">
                 Built by ꧁༒𝓜𝓾𝓱𝓪𝓶𝓶𝓪𝓭𝓣𝓪𝓺𝓲༒꧂
             </p>
+
+            <div class="mt-4">
+                <a href="https://sites.google.com/view/coreaideveloper/home" 
+                   target="_blank"
+                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white 
+                          font-semibold py-2 px-5 rounded-xl shadow-md transition">
+                    See Details
+                </a>
+            </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
+        <div class="bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-gray-200">
 
-            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
                 Your Prompt
             </label>
 
             <textarea id="promptInput" rows="4"
-                class="w-full p-4 bg-gray-50 dark:bg-gray-900 border border-gray-300 
-                       dark:border-gray-700 text-gray-800 dark:text-gray-200 
-                       rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 transition"
-                placeholder="Ask Jarvis anything..."></textarea>
+                class="w-full p-4 bg-gray-50 border border-gray-300 
+                       text-gray-800 rounded-xl shadow-sm focus:ring-blue-500 
+                       focus:border-blue-500 transition"
+                placeholder="Ask the AI anything..."></textarea>
 
             <div class="mt-4 flex items-center gap-3">
 
@@ -186,12 +213,17 @@
                     🎤
                 </button>
 
+                <button id="repeatVoiceButton"
+                    class="hidden bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl shadow transition">
+                    🔊
+                </button>
+
             </div>
         </div>
 
         <div id="loadingIndicator" class="hidden mt-6 text-center">
             <div class="animate-spin rounded-full h-10 w-10 border-b-4 border-blue-600 mx-auto"></div>
-            <p class="mt-3 text-gray-600 dark:text-gray-300">Thinking...</p>
+            <p class="mt-3 text-gray-800">Thinking...</p>
         </div>
 
         <div id="responseContainer" class="mt-8 space-y-4"></div>
