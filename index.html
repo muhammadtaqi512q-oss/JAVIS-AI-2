@@ -8,22 +8,22 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: #fff; height: 100vh; display: flex; flex-direction: column; align-items: center; user-select: none; }
         
-        /* Top Navigation */
+        /* Navigation Profile */
         .top-nav { align-self: flex-end; padding: 20px; }
         .profile-icon { background: #004a7c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
 
         .main-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-top: -120px; }
         
-        /* Logo Style */
+        /* Logo */
         .logo { font-size: 90px; font-weight: 500; color: #004a7c; letter-spacing: -4px; margin-bottom: 30px; }
         
-        /* Search Box with Icon */
+        /* Search Box */
         .search-wrapper { width: 100%; max-width: 584px; position: relative; }
         .search-icon { position: absolute; left: 18px; top: 13px; color: #9aa0a6; font-size: 16px; }
-        .search-main { width: 100%; height: 46px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 0 50px; font-size: 16px; outline: none; }
-        .search-main:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); border-color: transparent; }
+        .search-main { width: 100%; height: 46px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 0 50px; font-size: 16px; outline: none; transition: box-shadow 0.2s; }
+        .search-main:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
 
-        /* Results Display (Matching Nexura) */
+        /* Results List */
         #results-container { width: 100%; max-width: 584px; margin-top: 25px; display: none; }
         .result-card { padding: 12px 0; border-bottom: 1px solid #f1f3f4; position: relative; }
         .res-url { font-size: 13px; color: #006621; display: block; margin-bottom: 2px; }
@@ -45,13 +45,13 @@
         <h1 class="logo">NEXURA</h1>
         <div class="search-wrapper">
             <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-main" placeholder="Search JAVIS Database...">
+            <input type="text" id="search-input" class="search-main" placeholder="Search JAVIS Database..." autocomplete="off">
         </div>
         <div id="results-container"></div>
     </div>
 
     <script>
-        const _nxDB = [{"n":"Q09SRSBHUk9VUCBDT01QQU5Z","d":"d3d3LmNnYy5tdA==","s":"aHR0cHM6Ly93d3d6Lm9uZWFwcC5kZXYv","p":1},{"n":"TkVYVVJB","d":"TkVYVVJBLm10","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L05FWFVSQQ==","p":1}];
+        const _nxDB = [{"n":"Q2hhdEdQVA==","d":"Y2hhdGdwdC5jb20=","s":"aHR0cHM6Ly9jaGF0Z3B0LmNvbQ==","p":1},{"n":"R2VtaW5p","d":"Z2VtaW5pLmdvb2dsZS5jb20=","s":"aHR0cHM6Ly9nZW1pbmkuZ29vZ2xlLmNvbQ==","p":1},{"n":"Q2xhdWRlIEFJ","d":"Y2xhdWRlLmFp","s":"aHR0cHM6Ly9jbGF1ZGUuYWk=","p":2},{"n":"TWljcm9zb2Z0IENvcGlsb3Q=","d":"Y29waWxvdC5taWNyb3NvZnQuY29t","s":"aHR0cHM6Ly9jb3BpbG90Lm1pY3Jvc29mdC5jb20=","p":1},{"n":"UGVycGxleGl0eSBBSQ==","d":"cGVycGxleGl0eS5haQ==","s":"aHR0cHM6Ly9wZXJwbGV4aXR5LmFp","p":2},{"n":"TWlkam91cm5leQ==","d":"bWlkam91cm5leS5jb20=","s":"aHR0cHM6Ly9taWRqb3VybmV5LmNvbQ==","p":1},{"n":"Q09SRSBHUk9VUCBDT01QQU5Z","d":"d3d3LmNnYy5tdA==","s":"aHR0cHM6Ly93d3d6Lm9uZWFwcC5kZXYv","p":1},{"n":"TkVYVVJB","d":"d3d3Lm5leHVyYS5tdA==","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L05FWFVSQQ==","p":1},{"n":"V0VCIEJVSUxERVI=","d":"d2ViX2J1aWxkZXIuY29t","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vTS1CT1gvQUk=","p":1},{"n":"R09PR0xF","d":"Z29vZ2xlLmNvbQ==","s":"aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbQ==","p":1}]; 
         
         const input = document.getElementById('search-input');
         const container = document.getElementById('results-container');
@@ -60,10 +60,16 @@
             const query = input.value.toLowerCase().trim();
             if (!query) { container.style.display = 'none'; return; }
 
+            // Safe Decoding Filter
             const filtered = _nxDB.filter(item => {
-                const name = atob(item.n).toLowerCase();
-                const display = atob(item.d).toLowerCase();
-                return name.includes(query) || display.includes(query);
+                try {
+                    const name = atob(item.n).toLowerCase();
+                    const display = atob(item.d).toLowerCase();
+                    return name.includes(query) || display.includes(query);
+                } catch(e) {
+                    // Fallback for non-encoded data
+                    return item.n.toLowerCase().includes(query) || item.d.toLowerCase().includes(query);
+                }
             });
 
             render(filtered);
@@ -73,12 +79,21 @@
             container.innerHTML = "";
             if(data.length === 0) { container.style.display = 'none'; return; }
             container.style.display = 'block';
+            
             data.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'result-card';
+                
+                let n, d, s;
+                try {
+                    n = atob(item.n); d = atob(item.d); s = atob(item.s);
+                } catch(e) {
+                    n = item.n; d = item.d; s = item.s;
+                }
+
                 card.innerHTML = `
-                    <span class="res-url">${atob(item.d)}</span>
-                    <a href="${atob(item.s)}" class="res-title" target="_blank">${atob(item.n)}</a>
+                    <span class="res-url">${d}</span>
+                    <a href="${s}" class="res-title" target="_blank">${n}</a>
                     <span class="rank-badge">P${item.p}</span>
                 `;
                 container.appendChild(card);
