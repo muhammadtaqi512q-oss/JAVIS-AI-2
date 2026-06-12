@@ -7,16 +7,16 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: #fff; height: 100vh; display: flex; flex-direction: column; align-items: center; user-select: none; }
-        
+
         /* Navigation Profile */
         .top-nav { align-self: flex-end; padding: 20px; }
         .profile-icon { background: #004a7c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
 
         .main-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-top: -120px; }
-        
+
         /* Logo */
         .logo { font-size: 90px; font-weight: 500; color: #004a7c; letter-spacing: -4px; margin-bottom: 30px; }
-        
+
         /* Search Box */
         .search-wrapper { width: 100%; max-width: 584px; position: relative; }
         .search-icon { position: absolute; left: 18px; top: 13px; color: #9aa0a6; font-size: 16px; }
@@ -30,6 +30,21 @@
         .res-title { font-size: 19px; color: #1a0dab; text-decoration: none; font-weight: 400; }
         .res-title:hover { text-decoration: underline; }
         .rank-badge { position: absolute; right: 0; top: 15px; font-size: 10px; background: #f1f3f4; padding: 2px 8px; border-radius: 10px; color: #70757a; }
+        .share-btn { margin-left: 12px; color: #70757a; cursor: pointer; font-size: 16px; transition: color 0.2s; vertical-align: middle; }
+        .share-btn:hover { color: #1a0dab; }
+
+        /* Shared view (when opened with hash) */
+        .shared-view { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100vh; background: #f8f9fa; }
+        .shared-view .result-card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 500px; width: 90%; border: none; }
+        .shared-view .res-title { font-size: 24px; }
+        .back-btn { margin-top: 20px; background: #004a7c; color: white; border: none; padding: 8px 24px; border-radius: 20px; cursor: pointer; font-size: 14px; }
+        .back-btn:hover { background: #003554; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 10; }
+        .toast.show { opacity: 1; }
+        /* Global share footer */
+        .global-share { margin-top: 40px; padding-bottom: 20px; text-align: center; }
+        .global-share button { background: none; border: 1px solid #dadce0; color: #3c4043; padding: 8px 20px; border-radius: 24px; cursor: pointer; font-size: 14px; }
+        .global-share button:hover { background: #f1f3f4; }
     </style>
     <script>
         // Security Shields
@@ -39,65 +54,150 @@
     </script>
 </head>
 <body>
-    <div class="top-nav"><div class="profile-icon">J</div></div>
-    
-    <div class="main-container">
-        <h1 class="logo">NEXURA</h1>
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-main" placeholder="Search JAVIS Database..." autocomplete="off">
+    <!-- Normal UI -->
+    <div id="normal-ui" style="display: flex; flex-direction: column; height: 100%; width: 100%; align-items: center;">
+        <div class="top-nav"><div class="profile-icon">J</div></div>
+        <div class="main-container">
+            <h1 class="logo">NEXURA</h1>
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-main" placeholder="Search JAVIS Database..." autocomplete="off">
+            </div>
+            <div id="results-container"></div>
+            <!-- Global share button at bottom -->
+            <div class="global-share" id="global-share-btn" style="display: none;">
+                <button onclick="copyShareLink('nexura.mt')">🔗 Share NEXURA</button>
+            </div>
         </div>
-        <div id="results-container"></div>
     </div>
 
+    <!-- Shared view (hidden by default) -->
+    <div id="shared-view" style="display: none;" class="shared-view">
+        <div id="shared-card"></div>
+        <button class="back-btn" onclick="clearHash()">← Back to Search</button>
+    </div>
+    <div id="toast" class="toast">Link copied!</div>
+
     <script>
-        /*INJECT_DATABASE*/ 
-        
+        const _nxDB = [{"n":"Q09SRSBHUk9VUCBDT01QQU5Z","d":"Y2djLm10","s":"aHR0cHM6Ly93d3d6Lm9uZWFwcC5kZXYv","p":1},{"n":"TkVYVVJB","d":"bmV4dXJhLm10","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L05FWFVSQQ==","p":1},{"n":"V0VCIEJVSUxERVI=","d":"d2ViX2J1aWxkZXIuY29t","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vTS1CT1gvQUk=","p":1},{"n":"TkVYVVJBIFBST0ZJTEVT","d":"cHJvZmlsZXMubXQ=","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L04tUA==","p":1},{"n":"TkVYVVJBIERPTUFJTg==","d":"ZG9tYWluLm10","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L2ZpbmQ=","p":1},{"n":"TkVYVVJBIFNUT1JF","d":"bmV4dXJhLXN0b3JlLm10","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vSkFWSVMuQUkv","p":1},{"n":"TkVYVVJBIFBPT1IgSEVMUCBQUk9HUkFN","d":"bnBocC5tdA==","s":"aHR0cHM6Ly9tdWhhbW1hZHRhcWk1MTJxLW9zcy5naXRodWIuaW8vLm10L0hFTFA=","p":1},{"n":"R09PR0xF","d":"Z29vZ2xlLmNvbQ==","s":"aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbQ==","p":1},{"n":"Q2hhdEdQVA==","d":"Y2hhdGdwdC5jb20=","s":"aHR0cHM6Ly9jaGF0Z3B0LmNvbQ==","p":1},{"n":"R2VtaW5p","d":"Z2VtaW5pLmdvb2dsZS5jb20=","s":"aHR0cHM6Ly9nZW1pbmkuZ29vZ2xlLmNvbQ==","p":1},{"n":"Q2xhdWRlIEFJ","d":"Y2xhdWRlLmFp","s":"aHR0cHM6Ly9jbGF1ZGUuYWk=","p":2},{"n":"TWljcm9zb2Z0IENvcGlsb3Q=","d":"Y29waWxvdC5taWNyb3NvZnQuY29t","s":"aHR0cHM6Ly9jb3BpbG90Lm1pY3Jvc29mdC5jb20=","p":1},{"n":"UGVycGxleGl0eSBBSQ==","d":"cGVycGxleGl0eS5haQ==","s":"aHR0cHM6Ly9wZXJwbGV4aXR5LmFp","p":2},{"n":"TWlkam91cm5leQ==","d":"bWlkam91cm5leS5jb20=","s":"aHR0cHM6Ly9taWRqb3VybmV5LmNvbQ==","p":1},{"n":"QUVUSEVSIEFJ","d":"YWV0aGVyLnN0dQ==","s":"aHR0cHM6Ly9hZXRoZXItYWktbXQub25lYXBwLmRldi8=","p":2}];
+
         const input = document.getElementById('search-input');
         const container = document.getElementById('results-container');
+        const normalUI = document.getElementById('normal-ui');
+        const sharedView = document.getElementById('shared-view');
+        const toast = document.getElementById('toast');
+
+        // Check for shared hash on load
+        window.addEventListener('load', handleHash);
+
+        function handleHash() {
+            const hash = window.location.hash.substring(1); // remove #
+            if (hash) {
+                const entry = findEntryByDomain(hash);
+                if (entry) {
+                    showSharedView(entry);
+                } else {
+                    // Hash not recognized, go to normal view
+                    normalUI.style.display = 'flex';
+                    sharedView.style.display = 'none';
+                }
+            } else {
+                normalUI.style.display = 'flex';
+                sharedView.style.display = 'none';
+            }
+        }
+
+        function findEntryByDomain(domain) {
+            return _nxDB.find(item => {
+                try {
+                    return atob(item.d) === domain;
+                } catch(e) {
+                    return item.d === domain;
+                }
+            });
+        }
+
+        function showSharedView(entry) {
+            normalUI.style.display = 'none';
+            sharedView.style.display = 'flex';
+            const card = document.getElementById('shared-card');
+            let n, d, s;
+            try { n = atob(entry.n); d = atob(entry.d); s = atob(entry.s); }
+            catch(e) { n = entry.n; d = entry.d; s = entry.s; }
+            card.innerHTML = `
+                <div class="result-card">
+                    <span class="res-url">${d}</span>
+                    <a href="${s}" class="res-title" target="_blank">${n}</a>
+                    <span class="rank-badge">P${entry.p}</span>
+                </div>
+            `;
+        }
+
+        function clearHash() {
+            history.pushState(null, null, ' ');
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+            handleHash();
+        }
+
+        // Handle back/forward browser buttons
+        window.addEventListener('hashchange', handleHash);
 
         input.addEventListener('input', () => {
             const query = input.value.toLowerCase().trim();
-            if (!query) { container.style.display = 'none'; return; }
+            if (!query) { container.style.display = 'none'; document.getElementById('global-share-btn').style.display = 'none'; return; }
 
-            // Safe Decoding Filter
             const filtered = _nxDB.filter(item => {
                 try {
                     const name = atob(item.n).toLowerCase();
                     const display = atob(item.d).toLowerCase();
                     return name.includes(query) || display.includes(query);
                 } catch(e) {
-                    // Fallback for non-encoded data
                     return item.n.toLowerCase().includes(query) || item.d.toLowerCase().includes(query);
                 }
             });
 
             render(filtered);
+            // Show global share if results exist
+            document.getElementById('global-share-btn').style.display = filtered.length ? 'block' : 'none';
         });
 
         function render(data) {
             container.innerHTML = "";
-            if(data.length === 0) { container.style.display = 'none'; return; }
+            if(data.length === 0) { container.style.display = 'none'; document.getElementById('global-share-btn').style.display = 'none'; return; }
             container.style.display = 'block';
-            
+
             data.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'result-card';
-                
+
                 let n, d, s;
-                try {
-                    n = atob(item.n); d = atob(item.d); s = atob(item.s);
-                } catch(e) {
-                    n = item.n; d = item.d; s = item.s;
-                }
+                try { n = atob(item.n); d = atob(item.d); s = atob(item.s); }
+                catch(e) { n = item.n; d = item.d; s = item.s; }
 
                 card.innerHTML = `
                     <span class="res-url">${d}</span>
                     <a href="${s}" class="res-title" target="_blank">${n}</a>
                     <span class="rank-badge">P${item.p}</span>
+                    <span class="share-btn" title="Copy share link for ${d}" onclick="copyShareLink('${d}')">🔗</span>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // Copy shareable link with hash
+        function copyShareLink(domain) {
+            const base = window.location.origin + window.location.pathname;
+            const shareUrl = base + '#' + domain;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast();
+            }).catch(() => {
+                prompt('Copy this link:', shareUrl);
+            });
+        }
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
