@@ -1,10 +1,50 @@
 import os
 import json
-import subprocess
+import subprocess 
 import time
 
 # 200 NEW AI Categories & Characters
 CATEGORIES = [
+    # AI Characters & People
+    "ai_boys", "ai_girls", "ai_cyberpunk_boy", "ai_cyberpunk_girl", "ai_anime_boy", "ai_anime_girl",
+    "ai_monk", "ai_warrior", "ai_samurai", "ai_ninja", "ai_astronaut", "ai_king", "ai_queen",
+    "ai_robot", "ai_android", "ai_cyborg", "ai_demon", "ai_angel", "ai_vampire", "ai_wizard",
+    "ai_witch", "ai_viking", "ai_knight", "ai_pirate", "ai_detective", "ai_doctor", "ai_teacher",
+    "ai_alien", "ai_greek_god", "ai_pharaoh", "ai_superhero", "ai_villain", "ai_baby", "ai_old_man",
+    "ai_old_woman", "ai_soldier", "ai_gladiator", "ai_spartan", "ai_ghost", "ai_zombie",
+    
+    # Nature & Scenery AI
+    "ai_mountain", "ai_forest", "ai_ocean", "ai_space", "ai_galaxy", "ai_waterfall", "ai_desert",
+    "ai_volcano", "ai_jungle", "ai_cave", "ai_skyline", "ai_sunset", "ai_aurora", "ai_snow_mountain",
+    "ai_island", "ai_river", "ai_clouds", "ai_underwater", "ai_storm", "ai_lightning",
+
+    # AI Animals & Creatures
+    "ai_cat", "ai_dog", "ai_lion", "ai_tiger", "ai_wolf", "ai_dragon", "ai_phoenix", "ai_eagle",
+    "ai_bear", "ai_snake", "ai_horse", "ai_monkey", "ai_fox", "ai_owl", "ai_shark", "ai_whale",
+    "ai_dinosaur", "ai_unicorn", "ai_griffin", "ai_monster",
+
+    # Sci-Fi, Fantasy & Architecture
+    "ai_futuristic_city", "ai_cyberpunk_city", "ai_fantasy_castle", "ai_space_station",
+    "ai_alien_planet", "ai_sci_fi_lab", "ai_neon_street", "ai_flying_car", "ai_time_portal",
+    "ai_underwater_city", "ai_steampunk_world", "ai_floating_island", "ai_ancient_temple",
+    "ai_pyramids", "ai_abandoned_city", "ai_post_apocalypse", "ai_dystopia", "ai_utopia",
+    "ai_magic_forest", "ai_haunted_house",
+
+    # Art Styles & Conceptual AI
+    "ai_3d_avatar", "ai_hyperrealistic", "ai_unreal_engine", "ai_pixar_style", "ai_ghibli_style",
+    "ai_cinematic_short", "ai_dark_fantasy", "ai_synthwave", "ai_vaporwave", "ai_surrealism",
+    "ai_concept_art", "ai_glitch_art", "ai_hologram", "ai_neon_art", "ai_claymation",
+    "ai_papercraft", "ai_pixel_art", "ai_low_poly", "ai_abstract_art", "ai_fractal_art",
+
+    # AI Gaming & Pop Culture
+    "ai_minecraft", "ai_gta6", "ai_fortnite", "ai_elden_ring", "ai_cyberpunk2077", "ai_pokemon",
+    "ai_dragon_ball", "ai_naruto", "ai_one_piece", "ai_attack_on_titan", "ai_demon_slayer",
+    "ai_marvel", "ai_dc_comics", "ai_star_wars", "ai_lord_of_the_rings", "ai_harry_potter",
+    "ai_matrix", "ai_avatar_pandora", "ai_transformers", "ai_godzilla",
+
+    # Vehicles & Technology AI
+    "ai_supercar", "ai_hypercar", "ai_concept_bike", "ai_spaceship", "ai_mecha", "ai_jet",
+    "ai_ufo", "ai_drone", "ai_hoverboard", "ai_quantum_computer",
     # AI Historical Figures & Ancient Warriors
     "ai_roman_emperor", "ai_samurai_legend", "ai_mongol_warrior", "ai_persian_immortal",
     "ai_aztec_warrior", "ai_cleopatra", "ai_alexander_the_great", "ai_king_arthur",
