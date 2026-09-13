@@ -1,4 +1,4 @@
-name: Fetch 2000 AI Shorts (200 Categories x 10 Shorts)
+name: Fetch and Merge AI Shorts to JSON
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 120
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,12 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install yt-dlp
 
-      - name: Run AI Shorts Fetching Script
+      - name: Run Merge and Fetch Script
         run: python fetch_shorts.py
 
       - name: Commit and Push Updated data.json
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]"
           git add data.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update 2,000 AI Shorts in data.json" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-merge new AI Shorts into data.json" && git push)
