@@ -5,7 +5,7 @@ import time
 
 # 200 NEW AI Categories & Characters
 CATEGORIES = [
-    # Talking & Living Cute Fruits
+    # Talking & Living Cute Fruits                
     "ai_animated_cute_apple", "ai_animated_dancing_banana", "ai_animated_talking_mango", "ai_animated_happy_strawberry",
     "ai_animated_watermelon_character", "ai_animated_pineapple_warrior", "ai_animated_orange_fruit_face", "ai_animated_grapes_family",
     "ai_animated_cute_peach", "ai_animated_talking_avocado", "ai_animated_cherry_twins", "ai_animated_lemon_hero",
