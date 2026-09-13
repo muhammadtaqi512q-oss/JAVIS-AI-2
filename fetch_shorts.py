@@ -5,112 +5,75 @@ import time
 
 # 200 NEW AI Categories & Characters
 CATEGORIES = [
-    # AI Characters & People
-    "ai_boys", "ai_girls", "ai_cyberpunk_boy", "ai_cyberpunk_girl", "ai_anime_boy", "ai_anime_girl",
-    "ai_monk", "ai_warrior", "ai_samurai", "ai_ninja", "ai_astronaut", "ai_king", "ai_queen",
-    "ai_robot", "ai_android", "ai_cyborg", "ai_demon", "ai_angel", "ai_vampire", "ai_wizard",
-    "ai_witch", "ai_viking", "ai_knight", "ai_pirate", "ai_detective", "ai_doctor", "ai_teacher",
-    "ai_alien", "ai_greek_god", "ai_pharaoh", "ai_superhero", "ai_villain", "ai_baby", "ai_old_man",
-    "ai_old_woman", "ai_soldier", "ai_gladiator", "ai_spartan", "ai_ghost", "ai_zombie",
-    
-    # Nature & Scenery AI
-    "ai_mountain", "ai_forest", "ai_ocean", "ai_space", "ai_galaxy", "ai_waterfall", "ai_desert",
-    "ai_volcano", "ai_jungle", "ai_cave", "ai_skyline", "ai_sunset", "ai_aurora", "ai_snow_mountain",
-    "ai_island", "ai_river", "ai_clouds", "ai_underwater", "ai_storm", "ai_lightning",
+    # Talking & Living Cute Fruits
+    "ai_animated_cute_apple", "ai_animated_dancing_banana", "ai_animated_talking_mango", "ai_animated_happy_strawberry",
+    "ai_animated_watermelon_character", "ai_animated_pineapple_warrior", "ai_animated_orange_fruit_face", "ai_animated_grapes_family",
+    "ai_animated_cute_peach", "ai_animated_talking_avocado", "ai_animated_cherry_twins", "ai_animated_lemon_hero",
+    "ai_animated_papaya_character", "ai_animated_guava_monster", "ai_animated_kiwi_bird_fruit", "ai_animated_dragon_fruit_monster",
+    "ai_animated_pomegranate_king", "ai_animated_blueberry_squad", "ai_animated_raspberry_character", "ai_animated_lychee_fairy",
 
-    # AI Animals & Creatures
-    "ai_cat", "ai_dog", "ai_lion", "ai_tiger", "ai_wolf", "ai_dragon", "ai_phoenix", "ai_eagle",
-    "ai_bear", "ai_snake", "ai_horse", "ai_monkey", "ai_fox", "ai_owl", "ai_shark", "ai_whale",
-    "ai_dinosaur", "ai_unicorn", "ai_griffin", "ai_monster",
+    # Talking & Living Cute Vegetables
+    "ai_animated_talking_potato", "ai_animated_dancing_carrot", "ai_animated_broccoli_superhero", "ai_animated_cute_tomato",
+    "ai_animated_onion_crying_face", "ai_animated_garlic_warrior", "ai_animated_chili_pepper_fire", "ai_animated_corn_man",
+    "ai_animated_eggplant_character", "ai_animated_cucumber_ninja", "ai_animated_pumpkin_monster", "ai_animated_cabbage_king",
+    "ai_animated_mushroom_village", "ai_animated_capsicum_robot", "ai_animated_pea_pod_family", "ai_animated_spinach_power",
+    "ai_animated_beetroot_character", "ai_animated_ginger_root_monster", "ai_animated_cauliflower_brain", "ai_animated_radish_running",
 
-    # Sci-Fi, Fantasy & Architecture
-    "ai_futuristic_city", "ai_cyberpunk_city", "ai_fantasy_castle", "ai_space_station",
-    "ai_alien_planet", "ai_sci_fi_lab", "ai_neon_street", "ai_flying_car", "ai_time_portal",
-    "ai_underwater_city", "ai_steampunk_world", "ai_floating_island", "ai_ancient_temple",
-    "ai_pyramids", "ai_abandoned_city", "ai_post_apocalypse", "ai_dystopia", "ai_utopia",
-    "ai_magic_forest", "ai_haunted_house",
+    # Fruit & Vegetable Characters in Action
+    "ai_fruit_boxing_match", "ai_vegetable_dancing_party", "ai_talking_fruit_funny_joke", "ai_fruit_superhero_league",
+    "ai_vegetable_ninja_fight", "ai_fruit_racing_cars", "ai_animated_veggie_orchestra", "ai_fruit_gym_workout",
+    "ai_talking_fruit_singing", "ai_animated_fruit_school", "ai_fruit_cooking_chef", "ai_vegetable_army_march",
+    "ai_animated_fruit_magician", "ai_fruit_space_astronaut", "ai_vegetable_rock_band", "ai_animated_fruit_football",
+    "ai_fruit_skateboarding", "ai_vegetable_karate_master", "ai_fruit_dj_party", "ai_animated_veggie_detective",
 
-    # Art Styles & Conceptual AI
-    "ai_3d_avatar", "ai_hyperrealistic", "ai_unreal_engine", "ai_pixar_style", "ai_ghibli_style",
-    "ai_cinematic_short", "ai_dark_fantasy", "ai_synthwave", "ai_vaporwave", "ai_surrealism",
-    "ai_concept_art", "ai_glitch_art", "ai_hologram", "ai_neon_art", "ai_claymation",
-    "ai_papercraft", "ai_pixel_art", "ai_low_poly", "ai_abstract_art", "ai_fractal_art",
+    # Transformations & Hybrid Monsters (Veggie & Fruit AI)
+    "ai_fruit_to_monster_transformation", "ai_cyberpunk_banana", "ai_mecha_broccoli_robot", "ai_dragon_fruit_real_dragon",
+    "ai_chili_fire_elemental", "ai_watermelon_golem", "ai_pineapple_armored_knight", "ai_pumpkin_jack_o_lantern_ai",
+    "ai_crystal_apple_magic", "ai_glowing_bioluminescent_fruit", "ai_stone_vegetable_titan", "ai_poisonous_mushroom_witch",
+    "ai_neon_fruit_city", "ai_glitch_animated_avocado", "ai_lava_chili_pepper", "ai_ice_mint_berry",
+    "ai_galaxy_fruit_space", "ai_golden_mango_god", "ai_steampunk_clockwork_orange", "ai_alien_vegetable_creature",
 
-    # AI Gaming & Pop Culture
-    "ai_minecraft", "ai_gta6", "ai_fortnite", "ai_elden_ring", "ai_cyberpunk2077", "ai_pokemon",
-    "ai_dragon_ball", "ai_naruto", "ai_one_piece", "ai_attack_on_titan", "ai_demon_slayer",
-    "ai_marvel", "ai_dc_comics", "ai_star_wars", "ai_lord_of_the_rings", "ai_harry_potter",
-    "ai_matrix", "ai_avatar_pandora", "ai_transformers", "ai_godzilla",
+    # 3D Hyper-Realistic & Photorealistic Fruit Animations
+    "ai_3d_hyperrealistic_dancing_apple", "ai_photorealistic_talking_watermelon", "ai_3d_cute_banana_walk", "ai_unreal_engine_fruit_animation",
+    "ai_hyperrealistic_cute_tomato_face", "ai_3d_juicy_orange_splash", "ai_cinematic_glowing_berries", "ai_3d_animated_avocado_dance",
+    "ai_photorealistic_veggie_world", "ai_3d_cute_strawberry_smile", "ai_hyperrealistic_mango_character", "ai_3d_funny_potato_expression",
+    "ai_cinematic_fruit_explosion", "ai_3d_pineapple_dancing", "ai_photorealistic_lemon_expressions", "ai_3d_animated_cherry_love",
+    "ai_hyperrealistic_mushroom_spores", "ai_3d_funny_chili_reaction", "ai_cinematic_veggie_forest", "ai_3d_cute_grapes_jumping",
 
-    # Vehicles & Technology AI
-    "ai_supercar", "ai_hypercar", "ai_concept_bike", "ai_spaceship", "ai_mecha", "ai_jet",
-    "ai_ufo", "ai_drone", "ai_hoverboard", "ai_quantum_computer",
-    # AI Historical Figures & Ancient Warriors
-    "ai_roman_emperor", "ai_samurai_legend", "ai_mongol_warrior", "ai_persian_immortal",
-    "ai_aztec_warrior", "ai_cleopatra", "ai_alexander_the_great", "ai_king_arthur",
-    "ai_celtic_warrior", "ai_ottoman_janissary", "ai_ninja_assassin", "ai_gladiator_champion",
-    "ai_spartan_king", "ai_pharaoh_guard", "ai_viking_berserker", "ai_medieval_monk",
-    "ai_templar_knight", "ai_samurai_geisha", "ai_ancient_philosopher", "ai_tribal_chief",
+    # Emotion & Story-Driven Fruit Shorts
+    "ai_sad_apple_story", "ai_angry_chili_pepper", "ai_scared_little_potato", "ai_happy_banana_adventure",
+    "ai_lonely_strawberry_animation", "ai_brave_carrot_hero", "ai_funny_talking_veggies", "ai_cute_baby_fruit_animation",
+    "ai_fruit_love_story_animation", "ai_vegetable_escape_from_kitchen", "ai_fruit_friendship_story", "ai_sleeping_cute_peach",
+    "ai_surprised_avocado_face", "ai_hungry_caterpillar_and_fruit", "ai_fruit_birthday_party", "ai_veggie_bedtime_story",
+    "ai_giant_fruit_attack", "ai_tiny_vegetable_world", "ai_magic_fruit_tree", "ai_talking_fruit_compilation",
 
-    # World Cultures & Traditional Attire AI
-    "ai_indian_wedding", "ai_japanese_kimono", "ai_arabian_sheikh", "ai_african_warrior",
-    "ai_chinese_emperor", "ai_korean_hanbok", "ai_mexican_mariachi", "ai_viking_valkyrie",
-    "ai_native_american", "ai_bedouin_nomad", "ai_persian_princess", "ai_scottish_highlander",
-    "ai_egyptian_god", "ai_russian_czar", "ai_balines_dancer", "ai_tibetan_monk",
-    "ai_spanish_matador", "ai_thai_warrior", "ai_hawaiian_kahuna", "ai_polynesian_tribal",
+    # Kitchen & Food World Fantasy
+    "ai_kitchen_counter_veggie_party", "ai_refrigerator_fruit_night_life", "ai_fruit_salad_dancing", "ai_veggie_soup_swimming_pool",
+    "ai_juice_blender_escape_plan", "ai_cutting_board_veggie_city", "ai_fruit_supermarket_adventure", "ai_animated_fruit_market",
+    "ai_veggie_garden_fairy_tale", "ai_fruit_tree_village", "ai_underwater_fruit_aquarium", "ai_flying_fruit_balloons",
+    "ai_candy_and_fruit_world", "ai_veggie_farm_story", "ai_fruit_waterfall_splash", "ai_animated_fruit_baking",
+    "ai_ice_cream_and_fruit_friends", "ai_fruit_picnic_day", "ai_veggie_harvest_festival", "ai_giant_watermelon_house",
 
-    # AI Mythological & Folklore Creatures
-    "ai_minotaur", "ai_centaur", "ai_medusa", "ai_kraken", "ai_anubis", "ai_thor",
-    "ai_odin", "ai_poseidon", "ai_zeus", "ai_valkyrie", "ai_yeti", "ai_wendigo",
-    "ai_basilisk", "ai_sphinx", "ai_golem", "ai_cyclops", "ai_siren", "ai_pegasus",
-    "ai_hydra", "ai_fenrir",
+    # ASMR, Satisfying & Visual Effects Fruit AI
+    "ai_fruit_asmr_animation", "ai_satisfying_veggie_slicing_ai", "ai_glowing_neon_fruits", "ai_squishy_cute_fruit_satisfying",
+    "ai_fruit_jelly_transformation", "ai_kinetic_sand_fruit_animation", "ai_water_drop_on_talking_fruit", "ai_melting_ice_fruit_ai",
+    "ai_rainbow_color_changing_apple", "ai_glitter_sparkle_strawberry", "ai_crystal_cut_fruit_visual", "ai_satisfying_fruit_peeling_ai",
+    "ai_gummy_bear_and_fruit_animation", "ai_slime_fruit_character", "ai_hyper_satisfying_veggie_cut", "ai_glowing_mushroom_asmr",
+    "ai_fruit_crushing_satisfying", "ai_neon_veggie_glow_in_dark", "ai_fruit_bubble_gum_pop", "ai_satisfying_fruit_juicing",
 
-    # Sci-Fi Cybernetic & Post-Human AI
-    "ai_mecha_pilot", "ai_exosuit_soldier", "ai_space_bounty_hunter", "ai_cyber_ninja",
-    "ai_cybernetic_samurai", "ai_ai_overlord", "ai_android_assassin", "ai_cyborg_gladiator",
-    "ai_quantum_human", "ai_neon_bounty_hunter", "ai_space_pirate", "ai_alien_diplomat",
-    "ai_dystopian_rebel", "ai_cyber_detective", "ai_hologram_singer", "ai_mech_suit",
-    "ai_nano_tech_man", "ai_synth_human", "ai_time_enforcer", "ai_void_walker",
+    # Aesthetic & Art Style Vegetables/Fruits
+    "ai_claymation_cute_fruit", "ai_origami_paper_vegetables", "ai_woolen_crochet_animated_fruits", "ai_watercolor_talking_veggies",
+    "ai_pixar_style_cute_apple", "ai_anime_style_talking_fruit", "ai_ghibli_style_veggie_garden", "ai_retro_8bit_pixel_fruit",
+    "ai_felt_plushie_animated_banana", "ai_glass_sculpture_glowing_fruit", "ai_cartoon_veggie_show", "ai_chibi_fruit_characters",
+    "ai_disney_style_talking_mango", "ai_3d_clay_veggie_world", "ai_doodle_art_animated_fruits", "ai_low_poly_3d_fruit",
+    "ai_vibrant_pastel_veggies", "ai_gothic_style_dark_pumpkin", "ai_cyberpunk_neon_citrus", "ai_fantasy_fairy_fruit",
 
-    # Fantasy Professions & RPG Classes
-    "ai_necromancer", "ai_paladin", "ai_druid", "ai_bard", "ai_archmage", "ai_assassin",
-    "ai_beast_master", "ai_elemental_mage", "ai_shadow_knight", "ai_potion_maker",
-    "ai_dragon_rider", "ai_demon_hunter", "ai_blood_mage", "ai_runesmith", "ai_astrologer",
-    "ai_bounty_hunter", "ai_alchemist", "ai_battle_mage", "ai_divine_cleric", "ai_soul_reaper",
-
-    # Extreme Environments & Post-Apocalypse
-    "ai_nuclear_winter", "ai_cyber_wasteland", "ai_sub_zero_ice_city", "ai_sandstorm_desert", "ai_toxic_swamp",
-    "ai_volcanic_ash_world", "ai_acid_rain_city", "ai_alien_jungle", "ai_space_colony", "ai_underground_bunker",
-    "ai_flooded_metropolis", "ai_asteroid_mining", "ai_deep_space_void", "ai_frozen_wasteland", "ai_lava_planet",
-    "ai_ruined_sanctuary", "ai_radiation_zone", "ai_sunken_continent", "ai_black_hole_horizon", "ai_quantum_realm",
-
-    # Futuristic & Retro Vehicles
-    "ai_hover_car", "ai_cyber_truck", "ai_flying_motorcycle", "ai_steampunk_train",
-    "ai_space_dreadnought", "ai_plasma_supercar", "ai_underwater_sub_fighter", "ai_armored_mech",
-    "ai_alien_starship", "ai_neon_racer", "ai_solar_sail_ship", "ai_supersonic_jet",
-    "ai_cyber_tank", "ai_futuristic_yacht", "ai_warp_drive_ship", "ai_hover_tank",
-    "ai_steampunk_airship", "ai_exo_rover", "ai_orbital_shuttle", "ai_quantum_ship",
-
-    # Unique Surreal & Digital Art Styles
-    "ai_origami_art", "ai_stained_glass", "ai_wireframe_3d", "ai_watercolor_cinematic",
-    "ai_charcoal_sketch", "ai_chibi_character", "ai_ink_wash_painting", "ai_graffiti_mural",
-    "ai_isometric_city", "ai_glitch_core", "ai_retrofuturism", "ai_cyber_punk_gothic",
-    "ai_blueprint_art", "ai_voxel_world", "ai_oil_painting_masterpiece", "ai_marble_statue",
-    "ai_hologram_matrix", "ai_sand_art", "ai_glass_sculpture", "ai_neon_gothic",
-
-    # Popular Anime, Games & Media Tropes
-    "ai_mecha_godzilla", "ai_cyberpunk_samurai_girl", "ai_fantasy_dungeon", "ai_space_marine",
-    "ai_dark_souls_boss", "ai_monster_hunter", "ai_tekken_fighter", "ai_street_fighter",
-    "ai_genshin_impact_style", "ai_valorant_style", "ai_overwatch_hero", "ai_final_fantasy",
-    "ai_anime_villain", "ai_anime_transformation", "ai_chibi_anime", "ai_kaiju_battle",
-    "ai_cyber_fighter", "ai_stealth_ninja", "ai_arena_champion", "ai_space_explorer",
-
-    # Specialized Short-Form Storytelling & Niche Topics
-    "ai_scary_mythology", "ai_unexplained_mysteries", "ai_time_travel_stories", "ai_future_jobs_2050",
-    "ai_alien_encounter", "ai_parallel_universe", "ai_ancient_china", "ai_dark_fairytale",
-    "ai_deep_ocean_mysteries", "ai_space_exploration_2100", "ai_extinction_event", "ai_ancient_tech",
-    "ai_ancient_aliens", "ai_dystopian_laws", "ai_futuristic_weapons", "ai_cybernetic_implants",
-    "ai_ai_robot_revolution", "ai_mind_control_sci_fi", "ai_matrix_glitch", "ai_quantum_physics_visual"
+    # Specific Fruit/Veggie Mashups & Tropes
+    "ai_banana_cat_fruit_hybrid", "ai_apple_dog_character", "ai_avocado_bear_cute", "ai_watermelon_shark_ocean",
+    "ai_pineapple_owl_flying", "ai_tomato_frog_jumping", "ai_broccoli_tree_house", "ai_orange_cat_sleeping",
+    "ai_strawberry_bunny_hopping", "ai_potato_sloth_moving_slow", "ai_corn_cockatoo_bird", "ai_mushroom_snail_crawling",
+    "ai_mango_monkey_swinging", "ai_peach_piggy_cute", "ai_cherry_birds_singing", "ai_cucumber_snake_slithering",
+    "ai_eggplant_penguin_walking", "ai_pumpkin_bear_hugging", "ai_lemon_chick_chirping", "ai_kiwi_hedgehog_rolling"
 ]
 
 LINKS_PER_CATEGORY = 10
